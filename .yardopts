@@ -1,0 +1,13 @@
+--charset utf-8
+--readme README.md
+--title "Discord Ruby Documentation"
+--markup markdown
+--markup-provider redcarpet
+--plugin redcarpet-ext-disable_indented_code_blocks
+--hide-void-return
+--no-private
+lib/**/*.rb
+-
+README.md
+CHANGELOG.md
+LICENSE.txt
