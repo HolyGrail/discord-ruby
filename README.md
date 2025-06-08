@@ -10,6 +10,7 @@ A powerful and easy-to-use Ruby library for interacting with the Discord API. Th
 - Thread-safe event handling system
 - Easy-to-use API design
 - Built-in error handling and rate limiting
+- Ruby 3.3 and 3.4 support
 
 ## Installation
 
@@ -38,7 +39,7 @@ $ gem install discord-ruby
 Before you begin, you'll need:
 1. A Discord account
 2. A Discord bot token (create one at https://discord.com/developers/applications)
-3. Ruby 3.3 or higher
+3. Ruby 3.3 or higher (Ruby 3.4 supported)
 
 ### Quick Start
 
