@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "A Ruby client library for Discord API"
   spec.description = "A comprehensive Ruby gem for interacting with Discord's REST API and Gateway WebSocket"
   spec.homepage = "https://github.com/HolyGrail/discord-ruby"
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.3.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage

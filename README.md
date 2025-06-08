@@ -38,7 +38,7 @@ $ gem install discord-ruby
 Before you begin, you'll need:
 1. A Discord account
 2. A Discord bot token (create one at https://discord.com/developers/applications)
-3. Ruby 2.7 or higher
+3. Ruby 3.3 or higher
 
 ### Quick Start
 
