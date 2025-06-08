@@ -174,12 +174,30 @@ lib/discord/
 3. Add YARD documentation for new methods
 4. Follow existing code patterns and style
 5. Update CHANGELOG.md for notable changes
+6. **Verify Discord API v10 compliance for any API-related changes**
+
+### Discord API Compliance Verification
+When making changes that affect Discord API integration:
+
+1. **Check Current API Version**: Ensure using Discord API v10 endpoints
+2. **Parameter Validation**: Verify request parameters match Discord API specification
+3. **Response Handling**: Confirm response parsing aligns with Discord API format
+4. **Intent Requirements**: Validate Gateway intent requirements (especially MESSAGE_CONTENT)
+5. **Rate Limiting**: Ensure proper rate limit handling per Discord guidelines
+6. **Error Codes**: Verify error handling matches Discord API error responses
+7. **Deprecation Notices**: Check for deprecated Discord API features and update accordingly
+
+### API Compliance Resources
+- Official Discord API Documentation: https://discord.com/developers/docs/
+- Discord API Types (TypeScript): https://discord-api-types.dev/api/discord-api-types-v10
+- Discord Developer Community: https://discord.gg/discord-developers
 
 ### Debugging Approach
 1. Use `bundle exec rake spec` to run all tests
 2. Use `bundle exec standardrb --fix` to fix style issues
 3. Check `bundle exec yard doc` for documentation issues
-4. Test manually with example bot when needed
+4. **Verify Discord API compliance when API methods are modified**
+5. Test manually with example bot when needed
 
 ### Code Review Checklist
 - [ ] Tests added/updated for changes
@@ -189,3 +207,6 @@ lib/discord/
 - [ ] No sensitive information exposed
 - [ ] Error handling implemented properly
 - [ ] Thread safety considered if applicable
+- [ ] **Discord API v10 compliance verified for API-related changes**
+- [ ] **Intent requirements documented when applicable**
+- [ ] **Backward compatibility maintained where possible**
