@@ -17,5 +17,4 @@ group :development, :test do
   
   # Security scanning
   gem "bundler-audit"
-  gem "brakeman"
 end

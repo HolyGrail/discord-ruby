@@ -27,7 +27,31 @@ jobs:
         echo "Checking for vulnerable gems..."
         bundle exec bundler-audit check --update
     
-    - name: Run Brakeman security scan
+    - name: Check for hardcoded secrets
       run: |
-        echo "Running static security analysis..."
-        bundle exec brakeman --no-pager --format plain
+        echo "Scanning for potential hardcoded secrets..."
+        # Check for common secret patterns
+        if grep -r -i --include="*.rb" --include="*.yml" --include="*.yaml" \
+           -E "(password|secret|key|token|api_key).*=.*['\"][^'\"]{8,}['\"]" \
+           lib/ spec/ .github/ || true; then
+          echo "⚠️  Potential hardcoded secrets found above"
+        else
+          echo "✅ No obvious hardcoded secrets detected"
+        fi
+    
+    - name: Check for common security issues
+      run: |
+        echo "Checking for common security patterns..."
+        # Check for eval usage
+        if grep -r --include="*.rb" "eval\|instance_eval\|class_eval" lib/; then
+          echo "⚠️  Found eval usage - review for security"
+        else
+          echo "✅ No eval usage found"
+        fi
+        
+        # Check for system command usage
+        if grep -r --include="*.rb" "system\|exec\|\`" lib/; then
+          echo "⚠️  Found system command usage - review for security"
+        else
+          echo "✅ No system command usage found"
+        fi

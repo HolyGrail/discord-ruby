@@ -146,6 +146,12 @@ lib/discord/
 - Check message content length limits
 - Prevent injection attacks in user data
 
+### Security Scanning
+- `bundler-audit` checks for vulnerable gem dependencies
+- Custom CI checks for hardcoded secrets and security patterns
+- Note: Brakeman is Rails-specific and not applicable to this gem
+- Manual security reviews recommended for complex features
+
 ## Maintenance Tasks
 
 ### Regular Updates
