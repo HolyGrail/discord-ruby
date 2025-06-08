@@ -229,3 +229,28 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/HolyGrail/discord-ruby.
+
+### Development Guidelines
+
+This project follows specific development standards:
+
+- **Ruby Version**: 3.3+ (development with 3.4.4)
+- **Code Style**: StandardRB (`bundle exec standardrb --fix`)
+- **Testing**: RSpec with WebMock (`bundle exec rake spec`)
+- **Documentation**: YARD docs required for all public methods
+
+See [CLAUDE.md](CLAUDE.md) for detailed development guidelines and Claude Code usage rules.
+
+### Quick Start for Contributors
+
+```bash
+# Setup
+git clone https://github.com/HolyGrail/discord-ruby.git
+cd discord-ruby
+bundle install
+
+# Development workflow
+bundle exec rake spec      # Run tests
+bundle exec standardrb     # Check code style
+bundle exec yard doc       # Generate documentation
+```

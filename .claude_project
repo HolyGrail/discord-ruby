@@ -1,0 +1,51 @@
+# Claude Code Project Configuration
+
+This file contains project-specific instructions for Claude Code.
+
+## Project Overview
+Discord Ruby gem - A comprehensive Ruby client library for Discord API v10 with WebSocket Gateway support.
+
+## Key Development Principles
+
+1. **Ruby Standards**: Use Ruby 3.3+ features, follow StandardRB style guide
+2. **Testing**: Comprehensive RSpec tests with WebMock, no VCR usage
+3. **Documentation**: YARD docs required for all public methods with examples
+4. **Discord API**: Follow Discord API v10 conventions and rate limiting
+5. **Thread Safety**: Use concurrent data structures, handle threaded event dispatch
+
+## Important Commands
+
+- `bundle exec rake spec` - Run all tests
+- `bundle exec standardrb --fix` - Fix code style issues
+- `bundle exec yard doc` - Generate documentation
+- `bundle exec rake` - Run tests and StandardRB (default task)
+
+## File Structure Context
+
+- `lib/discord/client.rb` - Main client with event handling
+- `lib/discord/gateway.rb` - WebSocket connection management
+- `lib/discord/http.rb` - REST API client with error handling
+- `lib/discord/events.rb` - Thread-safe event system
+- `spec/` - RSpec tests following same structure as lib/
+
+## Code Style Rules
+
+- Use StandardRB (configured in `.standard.yml`)
+- Ruby 3.3+ syntax and features
+- Thread-safe patterns for concurrent operations
+- Comprehensive error handling with custom exceptions
+- YARD documentation with @param, @return, @example tags
+
+## Testing Patterns
+
+- Mock HTTP requests with WebMock
+- Test error conditions and edge cases
+- Verify thread safety where applicable
+- Use realistic Discord API responses in tests
+
+## Git Workflow
+
+- Atomic commits with descriptive messages
+- Include Claude Code attribution in commits
+- Update CHANGELOG.md for user-facing changes
+- Ensure CI passes before merging
