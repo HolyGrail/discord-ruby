@@ -1,0 +1,41 @@
+name: StandardRB
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  standardrb:
+    runs-on: ubuntu-latest
+    name: StandardRB Check
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
+    
+    - name: Install StandardRB
+      run: bundle install
+    
+    - name: Run StandardRB with auto-correct info
+      run: |
+        echo "Checking code style with StandardRB..."
+        if ! bundle exec standardrb --format github; then
+          echo ""
+          echo "To fix these issues locally, run:"
+          echo "  bundle exec standardrb --fix"
+          exit 1
+        fi
+    
+    - name: Check for fixable issues
+      if: failure()
+      run: |
+        echo ""
+        echo "Checking which issues can be auto-fixed..."
+        bundle exec standardrb --fix-unsafely --dry-run || true
