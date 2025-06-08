@@ -28,6 +28,20 @@ module Discord
     # @param token [String] Discord bot token
     # @param intents [Integer, nil] Gateway intents (defaults to 0)
     # @raise [ArgumentError] if token is nil or empty
+    #
+    # @note For verified bots, MESSAGE_CONTENT intent (1 << 15 = 32768) is required
+    #   to receive message content. Enable this in Discord Developer Portal under
+    #   Bot > Privileged Gateway Intents, and include it in your intents value.
+    #
+    # @example Basic client without privileged intents
+    #   client = Discord::Client.new(token: ENV["DISCORD_BOT_TOKEN"])
+    #
+    # @example Client with MESSAGE_CONTENT intent for verified bots
+    #   MESSAGE_CONTENT_INTENT = 1 << 15  # 32768
+    #   client = Discord::Client.new(
+    #     token: ENV["DISCORD_BOT_TOKEN"],
+    #     intents: MESSAGE_CONTENT_INTENT
+    #   )
     def initialize(token:, intents: nil)
       @token = validate_token!(token)
       @intents = intents || 0
@@ -73,24 +87,46 @@ module Discord
     #
     # @param channel_id [String] The channel ID to send the message to
     # @param content [String, nil] The text content of the message
-    # @param embed [Hash, nil] Rich embed object
+    # @param embed [Hash, nil] Rich embed object (deprecated, use embeds instead)
+    # @param embeds [Array<Hash>, nil] Array of rich embed objects (Discord API v10 standard)
     # @return [Hash] The created message object
     # @raise [Discord::APIError] if the request fails
     #
     # @example Send a simple text message
     #   client.send_message("123456789", content: "Hello, world!")
     #
-    # @example Send a message with an embed
+    # @example Send a message with an embed (deprecated syntax)
     #   embed = {
     #     title: "Example Embed",
     #     description: "This is a test embed",
     #     color: 0x00ff00
     #   }
     #   client.send_message("123456789", embed: embed)
-    def send_message(channel_id, content: nil, embed: nil)
+    #
+    # @example Send a message with embeds (recommended)
+    #   embeds = [
+    #     {
+    #       title: "First Embed",
+    #       description: "This is the first embed",
+    #       color: 0x00ff00
+    #     },
+    #     {
+    #       title: "Second Embed",
+    #       description: "This is the second embed",
+    #       color: 0x0000ff
+    #     }
+    #   ]
+    #   client.send_message("123456789", embeds: embeds)
+    def send_message(channel_id, content: nil, embed: nil, embeds: nil)
       payload = {}
       payload[:content] = content if content
-      payload[:embed] = embed if embed
+
+      # Handle embeds - prioritize the new 'embeds' parameter over deprecated 'embed'
+      if embeds
+        payload[:embeds] = embeds
+      elsif embed
+        payload[:embeds] = [embed]
+      end
 
       @http.post("/channels/#{channel_id}/messages", payload)
     end
@@ -99,10 +135,25 @@ module Discord
       @http.delete("/channels/#{channel_id}/messages/#{message_id}")
     end
 
-    def edit_message(channel_id, message_id, content: nil, embed: nil)
+    # Edits an existing message
+    #
+    # @param channel_id [String] The channel ID containing the message
+    # @param message_id [String] The message ID to edit
+    # @param content [String, nil] The new text content of the message
+    # @param embed [Hash, nil] Rich embed object (deprecated, use embeds instead)
+    # @param embeds [Array<Hash>, nil] Array of rich embed objects
+    # @return [Hash] The edited message object
+    # @raise [Discord::APIError] if the request fails
+    def edit_message(channel_id, message_id, content: nil, embed: nil, embeds: nil)
       payload = {}
       payload[:content] = content if content
-      payload[:embed] = embed if embed
+
+      # Handle embeds - prioritize the new 'embeds' parameter over deprecated 'embed'
+      if embeds
+        payload[:embeds] = embeds
+      elsif embed
+        payload[:embeds] = [embed]
+      end
 
       @http.patch("/channels/#{channel_id}/messages/#{message_id}", payload)
     end

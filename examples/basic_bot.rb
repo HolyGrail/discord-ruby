@@ -4,9 +4,20 @@
 require "discord"
 
 # Create a new Discord client with your bot token
+#
+# Gateway Intents explained:
+# - 0: No privileged intents (sufficient for basic bots)
+# - MESSAGE_CONTENT (32768): Required for verified bots to read message content
+# - 3276799: All intents (for testing - not recommended for production)
+#
+# For verified bots, enable MESSAGE_CONTENT intent in Discord Developer Portal:
+# Bot Settings > Privileged Gateway Intents > Message Content Intent
+MESSAGE_CONTENT_INTENT = 1 << 15  # 32768
+GUILD_MESSAGES_INTENT = 1 << 9    # 512
+
 client = Discord::Client.new(
   token: ENV["DISCORD_BOT_TOKEN"],
-  intents: 3276799 # All intents for testing
+  intents: GUILD_MESSAGES_INTENT | MESSAGE_CONTENT_INTENT
 )
 
 # Event: Bot is ready
@@ -31,6 +42,32 @@ client.on(:message_create) do |message|
   if message[:content].start_with?("!echo ")
     text = message[:content].sub("!echo ", "")
     client.send_message(message[:channel_id], content: text)
+  end
+
+  # Embed example command
+  if message[:content] == "!embed"
+    embed = {
+      title: "Example Embed",
+      description: "This is a test embed created with discord-ruby",
+      color: 0x00ff00,
+      timestamp: Time.now.utc.iso8601,
+      footer: {
+        text: "Powered by discord-ruby"
+      },
+      fields: [
+        {
+          name: "Field 1",
+          value: "This is inline",
+          inline: true
+        },
+        {
+          name: "Field 2",
+          value: "This is also inline",
+          inline: true
+        }
+      ]
+    }
+    client.send_message(message[:channel_id], embeds: [embed])
   end
 
   # React to messages containing "hello"

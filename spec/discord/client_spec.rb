@@ -70,14 +70,38 @@ RSpec.describe Discord::Client do
       expect(result).to eq({id: "987654321", content: content})
     end
 
-    it "sends an embed" do
+    it "sends an embed (deprecated syntax)" do
       channel_id = "123456789"
       embed = {title: "Test Embed", description: "This is a test"}
 
       expect(client.http).to receive(:post)
-        .with("/channels/#{channel_id}/messages", {embed: embed})
+        .with("/channels/#{channel_id}/messages", {embeds: [embed]})
 
       client.send_message(channel_id, embed: embed)
+    end
+
+    it "sends embeds array" do
+      channel_id = "123456789"
+      embeds = [
+        {title: "Test Embed 1", description: "First embed"},
+        {title: "Test Embed 2", description: "Second embed"}
+      ]
+
+      expect(client.http).to receive(:post)
+        .with("/channels/#{channel_id}/messages", {embeds: embeds})
+
+      client.send_message(channel_id, embeds: embeds)
+    end
+
+    it "prioritizes embeds over embed parameter" do
+      channel_id = "123456789"
+      embed = {title: "Old Embed", description: "Should be ignored"}
+      embeds = [{title: "New Embed", description: "Should be used"}]
+
+      expect(client.http).to receive(:post)
+        .with("/channels/#{channel_id}/messages", {embeds: embeds})
+
+      client.send_message(channel_id, embed: embed, embeds: embeds)
     end
   end
 
@@ -103,6 +127,17 @@ RSpec.describe Discord::Client do
         .with("/channels/#{channel_id}/messages/#{message_id}", {content: new_content})
 
       client.edit_message(channel_id, message_id, content: new_content)
+    end
+
+    it "edits message with embeds" do
+      channel_id = "123456789"
+      message_id = "987654321"
+      embeds = [{title: "Updated Embed", description: "Updated content"}]
+
+      expect(client.http).to receive(:patch)
+        .with("/channels/#{channel_id}/messages/#{message_id}", {embeds: embeds})
+
+      client.edit_message(channel_id, message_id, embeds: embeds)
     end
   end
 
