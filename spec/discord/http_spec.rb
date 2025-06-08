@@ -57,10 +57,11 @@ RSpec.describe Discord::HTTP do
 
   describe "#put" do
     it "makes a PUT request" do
-      stub_request(:put, "https://discord.com/api/v10/channels/123/messages/456/reactions/👍/@me")
+      emoji_encoded = URI.encode_www_form_component("👍")
+      stub_request(:put, "https://discord.com/api/v10/channels/123/messages/456/reactions/#{emoji_encoded}/@me")
         .to_return(status: 204, body: "")
 
-      result = http.put("/channels/123/messages/456/reactions/👍/@me")
+      result = http.put("/channels/123/messages/456/reactions/#{emoji_encoded}/@me")
       expect(result).to be_nil
     end
   end
