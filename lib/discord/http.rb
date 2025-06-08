@@ -67,7 +67,13 @@ module Discord
       }
 
       options[:payload] = payload.to_json if payload && %i[post patch put].include?(method)
-      options[:headers][:params] = params unless params.empty?
+
+      # Add query parameters for GET requests
+      unless params.empty?
+        query_string = URI.encode_www_form(params)
+        url += "?#{query_string}"
+        options[:url] = url
+      end
 
       response = RestClient::Request.execute(options)
       parse_response(response)
