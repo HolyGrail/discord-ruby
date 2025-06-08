@@ -105,7 +105,7 @@ module Discord
 
     def setup_handlers
       @ws.on :open do
-        puts "WebSocket connected"
+        Discord.logger.info "WebSocket connected"
       end
 
       @ws.on :message do |msg|
@@ -113,12 +113,12 @@ module Discord
       end
 
       @ws.on :close do |e|
-        puts "WebSocket closed: #{e}"
+        Discord.logger.info "WebSocket closed: #{e}"
         handle_close
       end
 
       @ws.on :error do |e|
-        puts "WebSocket error: #{e}"
+        Discord.logger.error "WebSocket error: #{e}"
       end
     end
 
@@ -144,7 +144,7 @@ module Discord
         handle_reconnect
       end
     rescue JSON::ParserError => e
-      puts "Failed to parse message: #{e}"
+      Discord.logger.error "Failed to parse message: #{e}"
     end
 
     def decompress_message(data)
@@ -154,7 +154,7 @@ module Discord
         decompressed = @zlib_stream.inflate(data)
         JSON.parse(decompressed, symbolize_names: true)
       rescue Zlib::DataError => e
-        puts "Zlib decompression error: #{e}"
+        Discord.logger.error "Zlib decompression error: #{e}"
         nil
       end
     end
@@ -245,7 +245,7 @@ module Discord
             @heartbeat_ack = false
             heartbeat
           else
-            puts "Heartbeat ACK not received, reconnecting..."
+            Discord.logger.warn "Heartbeat ACK not received, reconnecting..."
             disconnect
             connect
             break

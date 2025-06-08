@@ -87,23 +87,14 @@ module Discord
     #
     # @param channel_id [String] The channel ID to send the message to
     # @param content [String, nil] The text content of the message
-    # @param embed [Hash, nil] Rich embed object (deprecated, use embeds instead)
-    # @param embeds [Array<Hash>, nil] Array of rich embed objects (Discord API v10 standard)
+    # @param embeds [Array<Hash>, nil] Array of rich embed objects
     # @return [Hash] The created message object
     # @raise [Discord::APIError] if the request fails
     #
     # @example Send a simple text message
     #   client.send_message("123456789", content: "Hello, world!")
     #
-    # @example Send a message with an embed (deprecated syntax)
-    #   embed = {
-    #     title: "Example Embed",
-    #     description: "This is a test embed",
-    #     color: 0x00ff00
-    #   }
-    #   client.send_message("123456789", embed: embed)
-    #
-    # @example Send a message with embeds (recommended)
+    # @example Send a message with embeds
     #   embeds = [
     #     {
     #       title: "First Embed",
@@ -117,20 +108,28 @@ module Discord
     #     }
     #   ]
     #   client.send_message("123456789", embeds: embeds)
-    def send_message(channel_id, content: nil, embed: nil, embeds: nil)
+    #
+    # @example Send a single embed
+    #   embed = {
+    #     title: "Example Embed",
+    #     description: "This is a test embed",
+    #     color: 0x00ff00
+    #   }
+    #   client.send_message("123456789", embeds: [embed])
+    def send_message(channel_id, content: nil, embeds: nil)
       payload = {}
       payload[:content] = content if content
-
-      # Handle embeds - prioritize the new 'embeds' parameter over deprecated 'embed'
-      if embeds
-        payload[:embeds] = embeds
-      elsif embed
-        payload[:embeds] = [embed]
-      end
+      payload[:embeds] = embeds if embeds
 
       @http.post("/channels/#{channel_id}/messages", payload)
     end
 
+    # Deletes a message
+    #
+    # @param channel_id [String] The channel ID containing the message
+    # @param message_id [String] The message ID to delete
+    # @return [nil]
+    # @raise [Discord::APIError] if the request fails
     def delete_message(channel_id, message_id)
       @http.delete("/channels/#{channel_id}/messages/#{message_id}")
     end
@@ -140,20 +139,13 @@ module Discord
     # @param channel_id [String] The channel ID containing the message
     # @param message_id [String] The message ID to edit
     # @param content [String, nil] The new text content of the message
-    # @param embed [Hash, nil] Rich embed object (deprecated, use embeds instead)
     # @param embeds [Array<Hash>, nil] Array of rich embed objects
     # @return [Hash] The edited message object
     # @raise [Discord::APIError] if the request fails
-    def edit_message(channel_id, message_id, content: nil, embed: nil, embeds: nil)
+    def edit_message(channel_id, message_id, content: nil, embeds: nil)
       payload = {}
       payload[:content] = content if content
-
-      # Handle embeds - prioritize the new 'embeds' parameter over deprecated 'embed'
-      if embeds
-        payload[:embeds] = embeds
-      elsif embed
-        payload[:embeds] = [embed]
-      end
+      payload[:embeds] = embeds if embeds
 
       @http.patch("/channels/#{channel_id}/messages/#{message_id}", payload)
     end
@@ -176,19 +168,48 @@ module Discord
       @http.put("/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji_encoded}/@me")
     end
 
+    # Deletes a reaction from a message
+    #
+    # @param channel_id [String] The channel ID containing the message
+    # @param message_id [String] The message ID containing the reaction
+    # @param emoji [String] The emoji to remove (Unicode or custom emoji)
+    # @param user_id [String] The user ID whose reaction to remove (defaults to bot)
+    # @return [nil]
+    # @raise [Discord::APIError] if the request fails
+    #
+    # @example Remove bot's own reaction
+    #   client.delete_reaction("123456789", "987654321", "👍")
+    #
+    # @example Remove another user's reaction
+    #   client.delete_reaction("123456789", "987654321", "👍", "user_id_here")
     def delete_reaction(channel_id, message_id, emoji, user_id = "@me")
       emoji_encoded = URI.encode_www_form_component(emoji)
       @http.delete("/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji_encoded}/#{user_id}")
     end
 
+    # Gets information about a channel
+    #
+    # @param channel_id [String] The channel ID to retrieve
+    # @return [Hash] The channel object
+    # @raise [Discord::APIError] if the request fails
     def get_channel(channel_id)
       @http.get("/channels/#{channel_id}")
     end
 
+    # Gets information about a guild
+    #
+    # @param guild_id [String] The guild ID to retrieve
+    # @return [Hash] The guild object
+    # @raise [Discord::APIError] if the request fails
     def get_guild(guild_id)
       @http.get("/guilds/#{guild_id}")
     end
 
+    # Gets information about a user
+    #
+    # @param user_id [String] The user ID to retrieve
+    # @return [Hash] The user object
+    # @raise [Discord::APIError] if the request fails
     def get_user(user_id)
       @http.get("/users/#{user_id}")
     end

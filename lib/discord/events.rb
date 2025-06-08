@@ -49,8 +49,8 @@ module Discord
         Thread.new do
           handler.call(*args)
         rescue => e
-          puts "Error in event handler for #{event}: #{e.message}"
-          puts e.backtrace.join("\n")
+          Discord.logger.error "Error in event handler for #{event}: #{e.message}"
+          Discord.logger.debug e.backtrace.join("\n")
         end
       end
     end
