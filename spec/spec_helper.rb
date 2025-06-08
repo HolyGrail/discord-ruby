@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+
+# Code coverage
+require "simplecov"
+SimpleCov.start do
+  add_filter "/spec/"
+  add_filter "/vendor/"
+  
+  add_group "Client", "lib/discord/client.rb"
+  add_group "Gateway", "lib/discord/gateway.rb"
+  add_group "HTTP", "lib/discord/http.rb"
+  add_group "Events", "lib/discord/events.rb"
+end
+
 require "discord"
 require "webmock/rspec"
 

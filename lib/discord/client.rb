@@ -28,9 +28,7 @@ module Discord
     # @param intents [Integer, nil] Gateway intents (defaults to 0)
     # @raise [ArgumentError] if token is nil or empty
     def initialize(token:, intents: nil)
-      raise ArgumentError, "Token cannot be nil or empty" if token.nil? || token.empty?
-
-      @token = token
+      @token = validate_token!(token)
       @intents = intents || 0
       @gateway = nil
       @http = HTTP.new(token)
@@ -185,6 +183,24 @@ module Discord
 
     def handle_channel_delete(data)
       @channels.delete(data[:id])
+    end
+
+    # Validates Discord bot token format
+    #
+    # @param token [String] The token to validate
+    # @return [String] The validated token
+    # @raise [ArgumentError] if token is invalid
+    def validate_token!(token)
+      raise ArgumentError, "Token cannot be nil or empty" if token.nil? || token.empty?
+      raise ArgumentError, "Token must be a string" unless token.is_a?(String)
+      
+      # Basic Discord bot token format validation
+      # Tokens should contain 2 dots and be reasonably long
+      unless token.match?(/\A[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\z/) && token.length > 50
+        raise ArgumentError, "Token format appears invalid (expected Discord bot token format)"
+      end
+      
+      token
     end
   end
 end

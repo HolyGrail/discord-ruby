@@ -3,7 +3,8 @@
 require "spec_helper"
 
 RSpec.describe Discord::Client do
-  let(:token) { "test_token" }
+  # Valid Discord bot token format for testing (24.6.27 characters)
+  let(:token) { "MTIzNDU2Nzg5MDEyMzQ1Njc4.GhI4Jk.L5MnOpQrStUvWxYz0123456789ABC" }
   let(:client) { described_class.new(token: token) }
 
   describe "#initialize" do
@@ -30,6 +31,21 @@ RSpec.describe Discord::Client do
 
     it "starts as not ready" do
       expect(client).not_to be_ready
+    end
+
+    it "validates token format" do
+      expect { described_class.new(token: "invalid_token") }
+        .to raise_error(ArgumentError, /Token format appears invalid/)
+    end
+
+    it "rejects nil token" do
+      expect { described_class.new(token: nil) }
+        .to raise_error(ArgumentError, "Token cannot be nil or empty")
+    end
+
+    it "rejects empty token" do
+      expect { described_class.new(token: "") }
+        .to raise_error(ArgumentError, "Token cannot be nil or empty")
     end
   end
 

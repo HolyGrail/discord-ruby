@@ -1,0 +1,33 @@
+name: Security
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1' # Weekly on Monday
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    name: Security Audit
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
+    
+    - name: Run bundler-audit
+      run: |
+        echo "Checking for vulnerable gems..."
+        bundle exec bundler-audit check --update
+    
+    - name: Run Brakeman security scan
+      run: |
+        echo "Running static security analysis..."
+        bundle exec brakeman --no-pager --format plain

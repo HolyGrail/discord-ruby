@@ -1,8 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 IFS=$'\n\t'
-set -vx
 
+echo "=== Discord Ruby Development Setup ==="
+
+# Check Ruby version
+echo "Checking Ruby version..."
+ruby_version=$(ruby -v)
+echo "Using: $ruby_version"
+
+# Install dependencies
+echo "Installing gem dependencies..."
 bundle install
 
-# Do any other automated setup that you need to do here
+# Run initial checks
+echo "Running initial checks..."
+
+echo "✓ Running tests..."
+bundle exec rake spec
+
+echo "✓ Checking code style..."
+bundle exec standardrb
+
+echo "✓ Generating documentation..."
+bundle exec yard doc --quiet
+
+echo ""
+echo "=== Setup Complete! ==="
+echo ""
+echo "Available commands:"
+echo "  bin/console          - Start development console"
+echo "  bundle exec rake     - Run tests and linting"
+echo "  bundle exec rspec    - Run tests only"
+echo "  bundle exec standardrb --fix - Fix code style issues"
+echo "  bundle exec yard doc - Generate documentation"
+echo ""
+echo "Environment variables for testing:"
+echo "  DISCORD_BOT_TOKEN - Your Discord bot token (optional)"
+echo ""
