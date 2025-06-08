@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "forwardable"
+require "uri"
 
 module Discord
   # Main Discord client class that manages connections and provides API methods
@@ -193,13 +194,13 @@ module Discord
     def validate_token!(token)
       raise ArgumentError, "Token cannot be nil or empty" if token.nil? || token.empty?
       raise ArgumentError, "Token must be a string" unless token.is_a?(String)
-      
+
       # Basic Discord bot token format validation
       # Tokens should contain 2 dots and be reasonably long
       unless token.match?(/\A[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\z/) && token.length > 50
         raise ArgumentError, "Token format appears invalid (expected Discord bot token format)"
       end
-      
+
       token
     end
   end

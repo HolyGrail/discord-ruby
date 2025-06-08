@@ -7,7 +7,7 @@ require "simplecov"
 SimpleCov.start do
   add_filter "/spec/"
   add_filter "/vendor/"
-  
+
   add_group "Client", "lib/discord/client.rb"
   add_group "Gateway", "lib/discord/gateway.rb"
   add_group "HTTP", "lib/discord/http.rb"

@@ -14,7 +14,7 @@ group :development, :test do
   gem "standard"
   gem "yard"
   gem "simplecov"
-  
+
   # Security scanning
   gem "bundler-audit"
 end
