@@ -4,6 +4,13 @@ This document outlines the development rules and guidelines for using Claude Cod
 
 ## Project Standards
 
+### Dependency Management
+- **Philosophy**: Use latest gem versions by default
+- **Gemfile**: No version constraints unless necessary for compatibility
+- **Gemspec**: Minimal runtime dependency constraints
+- **Lock Policy**: Only pin versions when specific compatibility issues arise
+- **Updates**: Regularly update dependencies to latest versions
+
 ### Ruby Version
 - **Development**: Ruby 3.4.4 (see `.ruby-version`)
 - **Support**: Ruby 3.3+ (minimum requirement)

@@ -30,15 +30,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Dependencies
-  spec.add_dependency "websocket-client-simple", "~> 0.8"
-  spec.add_dependency "rest-client", "~> 2.1"
-  spec.add_dependency "json", "~> 2.6"
-  spec.add_dependency "concurrent-ruby", "~> 1.2"
-
-  # Development dependencies
-  spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "rspec", "~> 3.12"
-  spec.add_development_dependency "webmock", "~> 3.18"
+  # Runtime dependencies - minimal version constraints for compatibility
+  spec.add_dependency "websocket-client-simple"
+  spec.add_dependency "rest-client"
+  spec.add_dependency "json"
+  spec.add_dependency "concurrent-ruby"
 end

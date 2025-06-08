@@ -2,10 +2,10 @@ PATH
   remote: .
   specs:
     discord-ruby (0.1.0)
-      concurrent-ruby (~> 1.2)
-      json (~> 2.6)
-      rest-client (~> 2.1)
-      websocket-client-simple (~> 0.8)
+      concurrent-ruby
+      json
+      rest-client
+      websocket-client-simple
 
 GEM
   remote: https://rubygems.org/
@@ -128,15 +128,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.0)
   discord-ruby!
-  pry (~> 0.14)
-  rake (~> 13.0)
-  rspec (~> 3.12)
-  simplecov (~> 0.22)
-  standard (~> 1.33)
-  webmock (~> 3.18)
-  yard (~> 0.9)
+  pry
+  rake
+  rspec
+  simplecov
+  standard
+  webmock
+  yard
 
 BUNDLED WITH
    2.6.2
