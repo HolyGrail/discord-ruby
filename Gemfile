@@ -11,8 +11,7 @@ group :development, :test do
   gem "rspec", "~> 3.12"
   gem "webmock", "~> 3.18"
   gem "pry", "~> 0.14"
-  gem "rubocop", "~> 1.50"
-  gem "rubocop-rspec", "~> 2.20"
+  gem "standard", "~> 1.33"
   gem "yard", "~> 0.9"
   gem "simplecov", "~> 0.22"
 end

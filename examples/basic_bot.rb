@@ -54,13 +54,13 @@ begin
   # Start the bot
   puts "Starting bot..."
   client.run
-  
+
   # Keep the bot running
   sleep
 rescue Interrupt
   puts "\nShutting down..."
   client.stop
-rescue StandardError => e
+rescue => e
   puts "Error: #{e.message}"
   puts e.backtrace
 end

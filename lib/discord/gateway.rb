@@ -67,7 +67,7 @@ module Discord
     end
 
     def send_payload(op, data = nil)
-      payload = { op: op }
+      payload = {op: op}
       payload[:d] = data if data
       @ws.send(JSON.generate(payload))
     end
@@ -123,10 +123,10 @@ module Discord
     end
 
     def handle_message(data)
-      if data.is_a?(String)
-        message = JSON.parse(data, symbolize_names: true)
+      message = if data.is_a?(String)
+        JSON.parse(data, symbolize_names: true)
       else
-        message = decompress_message(data)
+        decompress_message(data)
       end
 
       @sequence = message[:s] if message[:s]
@@ -221,14 +221,14 @@ module Discord
       else
         @session_id = nil
         @sequence = nil
-        sleep(1 + rand(5))
+        sleep(rand(1..5))
         identify
       end
     end
 
     def handle_reconnect
       disconnect
-      sleep(1 + rand(5))
+      sleep(rand(1..5))
       connect
     end
 

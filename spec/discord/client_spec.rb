@@ -45,21 +45,21 @@ RSpec.describe Discord::Client do
     it "sends a message via HTTP" do
       channel_id = "123456789"
       content = "Hello, world!"
-      
+
       expect(client.http).to receive(:post)
-        .with("/channels/#{channel_id}/messages", { content: content })
-        .and_return({ id: "987654321", content: content })
+        .with("/channels/#{channel_id}/messages", {content: content})
+        .and_return({id: "987654321", content: content})
 
       result = client.send_message(channel_id, content: content)
-      expect(result).to eq({ id: "987654321", content: content })
+      expect(result).to eq({id: "987654321", content: content})
     end
 
     it "sends an embed" do
       channel_id = "123456789"
-      embed = { title: "Test Embed", description: "This is a test" }
-      
+      embed = {title: "Test Embed", description: "This is a test"}
+
       expect(client.http).to receive(:post)
-        .with("/channels/#{channel_id}/messages", { embed: embed })
+        .with("/channels/#{channel_id}/messages", {embed: embed})
 
       client.send_message(channel_id, embed: embed)
     end
@@ -69,7 +69,7 @@ RSpec.describe Discord::Client do
     it "deletes a message via HTTP" do
       channel_id = "123456789"
       message_id = "987654321"
-      
+
       expect(client.http).to receive(:delete)
         .with("/channels/#{channel_id}/messages/#{message_id}")
 
@@ -82,9 +82,9 @@ RSpec.describe Discord::Client do
       channel_id = "123456789"
       message_id = "987654321"
       new_content = "Edited message"
-      
+
       expect(client.http).to receive(:patch)
-        .with("/channels/#{channel_id}/messages/#{message_id}", { content: new_content })
+        .with("/channels/#{channel_id}/messages/#{message_id}", {content: new_content})
 
       client.edit_message(channel_id, message_id, content: new_content)
     end
@@ -95,7 +95,7 @@ RSpec.describe Discord::Client do
       channel_id = "123456789"
       message_id = "987654321"
       emoji = "👍"
-      
+
       expect(client.http).to receive(:put)
         .with("/channels/#{channel_id}/messages/#{message_id}/reactions/#{URI.encode_www_form_component(emoji)}/@me")
 
@@ -106,8 +106,8 @@ RSpec.describe Discord::Client do
   describe "#get_channel" do
     it "gets channel info via HTTP" do
       channel_id = "123456789"
-      channel_data = { id: channel_id, name: "general" }
-      
+      channel_data = {id: channel_id, name: "general"}
+
       expect(client.http).to receive(:get)
         .with("/channels/#{channel_id}")
         .and_return(channel_data)
@@ -120,8 +120,8 @@ RSpec.describe Discord::Client do
   describe "#get_guild" do
     it "gets guild info via HTTP" do
       guild_id = "123456789"
-      guild_data = { id: guild_id, name: "Test Guild" }
-      
+      guild_data = {id: guild_id, name: "Test Guild"}
+
       expect(client.http).to receive(:get)
         .with("/guilds/#{guild_id}")
         .and_return(guild_data)
@@ -134,8 +134,8 @@ RSpec.describe Discord::Client do
   describe "#get_user" do
     it "gets user info via HTTP" do
       user_id = "123456789"
-      user_data = { id: user_id, username: "TestUser" }
-      
+      user_data = {id: user_id, username: "TestUser"}
+
       expect(client.http).to receive(:get)
         .with("/users/#{user_id}")
         .and_return(user_data)

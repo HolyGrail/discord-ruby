@@ -18,40 +18,40 @@ RSpec.describe Discord::HTTP do
   describe "#get" do
     it "makes a GET request" do
       stub_request(:get, "https://discord.com/api/v10/users/@me")
-        .with(headers: { "Authorization" => "Bot test_token" })
+        .with(headers: {"Authorization" => "Bot test_token"})
         .to_return(status: 200, body: '{"id": "123", "username": "TestBot"}')
 
       result = http.get("/users/@me")
-      expect(result).to eq({ id: "123", username: "TestBot" })
+      expect(result).to eq({id: "123", username: "TestBot"})
     end
   end
 
   describe "#post" do
     it "makes a POST request with JSON payload" do
-      payload = { content: "Hello, world!" }
-      
+      payload = {content: "Hello, world!"}
+
       stub_request(:post, "https://discord.com/api/v10/channels/123/messages")
         .with(
           body: payload.to_json,
-          headers: { "Authorization" => "Bot test_token", "Content-Type" => "application/json" }
+          headers: {"Authorization" => "Bot test_token", "Content-Type" => "application/json"}
         )
         .to_return(status: 200, body: '{"id": "456", "content": "Hello, world!"}')
 
       result = http.post("/channels/123/messages", payload)
-      expect(result).to eq({ id: "456", content: "Hello, world!" })
+      expect(result).to eq({id: "456", content: "Hello, world!"})
     end
   end
 
   describe "#patch" do
     it "makes a PATCH request" do
-      payload = { content: "Updated message" }
-      
+      payload = {content: "Updated message"}
+
       stub_request(:patch, "https://discord.com/api/v10/channels/123/messages/456")
         .with(body: payload.to_json)
         .to_return(status: 200, body: '{"id": "456", "content": "Updated message"}')
 
       result = http.patch("/channels/123/messages/456", payload)
-      expect(result).to eq({ id: "456", content: "Updated message" })
+      expect(result).to eq({id: "456", content: "Updated message"})
     end
   end
 
@@ -109,7 +109,7 @@ RSpec.describe Discord::HTTP do
 
     it "handles rate limiting" do
       stub_request(:post, "https://discord.com/api/v10/channels/123/messages")
-        .to_return(status: 429, headers: { "Retry-After" => "2.5" }, body: "")
+        .to_return(status: 429, headers: {"Retry-After" => "2.5"}, body: "")
 
       expect { http.post("/channels/123/messages", {}) }
         .to raise_error(Discord::APIError, "Rate limited. Retry after 2.5 seconds")

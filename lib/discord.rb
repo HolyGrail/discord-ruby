@@ -8,7 +8,10 @@ require_relative "discord/events"
 
 module Discord
   class Error < StandardError; end
+
   class AuthenticationError < Error; end
+
   class APIError < Error; end
+
   class GatewayError < Error; end
 end

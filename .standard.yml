@@ -1,0 +1,11 @@
+# .standard.yml
+ruby_version: 2.7
+fix: true
+parallel: true
+format: progress
+
+ignore:
+  - 'vendor/**/*'
+  - 'tmp/**/*'
+  - 'doc/**/*'
+  - 'coverage/**/*'

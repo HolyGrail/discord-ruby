@@ -29,7 +29,7 @@ module Discord
     # @raise [ArgumentError] if token is nil or empty
     def initialize(token:, intents: nil)
       raise ArgumentError, "Token cannot be nil or empty" if token.nil? || token.empty?
-      
+
       @token = token
       @intents = intents || 0
       @gateway = nil
@@ -60,9 +60,7 @@ module Discord
       @ready
     end
 
-    def user
-      @user
-    end
+    attr_reader :user
 
     def guilds
       @guilds ||= {}

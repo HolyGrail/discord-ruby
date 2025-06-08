@@ -59,7 +59,7 @@ module Discord
 
     def request(method, endpoint, params: {}, payload: nil)
       url = "#{BASE_URL}#{endpoint}"
-      
+
       options = {
         method: method,
         url: url,
@@ -73,7 +73,7 @@ module Discord
       parse_response(response)
     rescue RestClient::BadRequest => e
       handle_error(e)
-    rescue RestClient::Unauthorized => e
+    rescue RestClient::Unauthorized
       raise AuthenticationError, "Invalid token"
     rescue RestClient::Forbidden => e
       handle_error(e)
@@ -93,7 +93,7 @@ module Discord
     end
 
     def handle_error(error)
-      if error.response && error.response.body
+      if error.response&.body
         begin
           error_data = JSON.parse(error.response.body, symbolize_names: true)
           message = error_data[:message] || error.message

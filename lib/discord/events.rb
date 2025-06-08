@@ -28,7 +28,7 @@ module Discord
     #   end
     def on(event, &block)
       raise ArgumentError, "Block is required" unless block_given?
-      
+
       event = event.to_sym
       @handlers[event] << block
     end
@@ -47,12 +47,10 @@ module Discord
 
       @handlers[event].each do |handler|
         Thread.new do
-          begin
-            handler.call(*args)
-          rescue StandardError => e
-            puts "Error in event handler for #{event}: #{e.message}"
-            puts e.backtrace.join("\n")
-          end
+          handler.call(*args)
+        rescue => e
+          puts "Error in event handler for #{event}: #{e.message}"
+          puts e.backtrace.join("\n")
         end
       end
     end
@@ -72,7 +70,7 @@ module Discord
     #   events.remove(:test)
     def remove(event, handler = nil)
       event = event.to_sym
-      
+
       if handler
         @handlers[event].delete(handler)
       else
